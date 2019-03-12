@@ -127,12 +127,12 @@
                 </documentation>
                 <condition>$Humantask11_globalVariable.payload/task:systemAttributes/task:outcome = 'REJECT'</condition>
                 <sequence>
-                    <assign></assign>
+                    <empty/>
                 </sequence>
             </elseif>
             <else>
                 <sequence>
-                    <assign></assign>
+                    <empty/>
                 </sequence>
             </else>
         </if>
