@@ -59,6 +59,7 @@
         <oracleHome>
             D:\Oracle\Middleware01Mar\Oracle_Home
         </oracleHome>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <!--
