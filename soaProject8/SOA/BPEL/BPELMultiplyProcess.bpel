@@ -1,0 +1,144 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Oracle JDeveloper BPEL Designer 
+  
+  Created: Wed Mar 13 04:00:21 IST 2019
+  Author:  ray
+  Type: BPEL 2.0 Process
+  Purpose: Asynchronous BPEL Process
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+<process name="BPELMultiplyProcess"
+         targetNamespace="http://xmlns.oracle.com/soaApp8/soaProject8/BPELMultiplyProcess"
+         xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+         xmlns:client="http://xmlns.oracle.com/soaApp8/soaProject8/BPELMultiplyProcess"
+         xmlns:ora="http://schemas.oracle.com/xpath/extension"
+         xmlns:ui="http://xmlns.oracle.com/soa/designer"
+         xmlns:bpelx="http://schemas.oracle.com/bpel/extension"
+         xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+         xmlns:oraext="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.ExtFunc"
+         xmlns:bpm="http://xmlns.oracle.com/bpmn20/extensions"
+         xmlns:xp20="http://www.oracle.com/XSL/Transform/java/oracle.tip.pc.services.functions.Xpath20"
+         xmlns:ess="http://xmlns.oracle.com/scheduler" xmlns:hwf="http://xmlns.oracle.com/bpel/workflow/xpath"
+         xmlns:xref="http://www.oracle.com/XSL/Transform/java/oracle.tip.xref.xpath.XRefXPathFunctions"
+         xmlns:dvm="http://www.oracle.com/XSL/Transform/java/oracle.tip.dvm.LookupValue"
+         xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+         xmlns:xdk="http://schemas.oracle.com/bpel/extension/xpath/function/xdk"
+         xmlns:ids="http://xmlns.oracle.com/bpel/services/IdentityService/xpath"
+         xmlns:ldap="http://schemas.oracle.com/xpath/extension/ldap"
+         xmlns:ns1="http://xmlns.oracle.com/bpel/workflow/taskService"
+         xmlns:task="http://xmlns.oracle.com/bpel/workflow/task"
+         xmlns:wfcommon="http://xmlns.oracle.com/bpel/workflow/common">
+
+    <import ui:processWSDL="true" namespace="http://xmlns.oracle.com/soaApp8/soaProject8/BPELMultiplyProcess" location="../WSDLs/BPELMultiplyProcess.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <!-- 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        PARTNERLINKS                                                      
+        List of services participating in this BPEL process               
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    --> 
+    <partnerLinks>
+        <!-- 
+      The 'client' role represents the requester of this service. It is 
+      used for callback. The location and correlation information associated
+      with the client role are automatically set using WS-Addressing.
+    -->
+        <partnerLink name="bpelmultiplyprocess_client" partnerLinkType="client:BPELMultiplyProcess" myRole="BPELMultiplyProcessProvider" partnerRole="BPELMultiplyProcessRequester"/>
+        <partnerLink name="Humantask1.TaskService" partnerLinkType="ns1:TaskService" partnerRole="TaskService"
+                     myRole="TaskServiceCallbackListener"/>
+    </partnerLinks>
+
+    <!-- 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        VARIABLES                                                        
+        List of messages and XML documents used within this BPEL process 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    -->
+    <variables>
+        <!-- Reference to the message passed as input during initiation -->
+        <variable name="inputVariable" messageType="client:BPELMultiplyProcessRequestMessage"/>
+
+        <!-- Reference to the message that will be sent back to the requester during callback -->
+        <variable name="outputVariable" messageType="client:BPELMultiplyProcessResponseMessage"/>
+        <variable name="Humantask11_globalVariable" messageType="ns1:taskMessage"/>
+    </variables>
+
+    <!-- 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+       ORCHESTRATION LOGIC                                               
+       Set of activities coordinating the flow of messages across the    
+       services integrated within this business process                  
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    -->
+    <sequence name="main">
+        <!-- Receive input from requestor. (Note: This maps to operation defined in BPELMultiplyProcess.wsdl) -->
+        <receive name="receiveInput" partnerLink="bpelmultiplyprocess_client" portType="client:BPELMultiplyProcess" operation="process" variable="inputVariable" createInstance="yes"/>
+        <assign name="Assign1">
+            <copy>
+                <from>$inputVariable.payload/client:a*$inputVariable.payload/client:b</from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$outputVariable.payload/client:result</to>
+            </copy>
+        </assign>
+        <scope name="Humantask12" xmlns:wf="http://schemas.oracle.com/bpel/extensions/workflow"
+               wf:key="Humantask11_globalVariable">
+            <bpelx:annotation>
+                <bpelx:pattern patternName="bpelx:workflow"></bpelx:pattern>
+            </bpelx:annotation>
+            <variables>
+                <variable name="initiateTaskInput" messageType="ns1:initiateTaskMessage"/>
+                <variable name="initiateTaskResponseMessage" messageType="ns1:initiateTaskResponseMessage"/>
+            </variables>
+            <sequence>
+                <assign name="Humantask12_AssignTaskAttributes">
+                    <copy>
+                        <from>number(3)</from>
+                        <to variable="initiateTaskInput" part="payload"><query>task:task/task:priority</query></to>
+                    </copy>
+                    <copy>
+                        <from>number(3)</from>
+                        <to variable="initiateTaskInput" part="payload"><query>task:task/task:priority</query></to>
+                    </copy>
+                    <copy>
+                        <from><literal><payload xmlns="http://xmlns.oracle.com/bpel/workflow/task">
+</payload></literal></from>
+                        <to variable="initiateTaskInput" part="payload"><query>task:task/task:payload</query></to>
+                    </copy>
+                </assign>
+                <invoke name="initiateTask_Humantask12" partnerLink="Humantask1.TaskService" operation="initiateTask"
+                        portType="ns1:TaskService" inputVariable="initiateTaskInput"
+                        outputVariable="initiateTaskResponseMessage"/>
+                <receive name="receiveCompletedTask_Humantask12" partnerLink="Humantask1.TaskService"
+                         portType="ns1:TaskServiceCallback" operation="onTaskCompleted"
+                         variable="Humantask11_globalVariable" createInstance="no"/>
+            </sequence>
+        </scope>
+        <if name="taskIf">
+            <documentation>
+                <![CDATA[Task outcome is APPROVE]]>
+            </documentation>
+            <condition>$Humantask11_globalVariable.payload/task:systemAttributes/task:outcome = 'APPROVE'</condition>
+            <sequence>
+                <assign></assign>
+            </sequence>
+            <elseif>
+                <documentation>
+                    <![CDATA[Task outcome is REJECT]]>
+                </documentation>
+                <condition>$Humantask11_globalVariable.payload/task:systemAttributes/task:outcome = 'REJECT'</condition>
+                <sequence>
+                    <assign></assign>
+                </sequence>
+            </elseif>
+            <else>
+                <sequence>
+                    <assign></assign>
+                </sequence>
+            </else>
+        </if>
+        <!-- 
+          Asynchronous callback to the requester. (Note: the callback location and correlation id is transparently handled using WS-addressing.)
+        -->
+        <invoke name="callbackClient" partnerLink="bpelmultiplyprocess_client" portType="client:BPELMultiplyProcessCallback" operation="processResponse" inputVariable="outputVariable"/>
+    </sequence>
+</process>
