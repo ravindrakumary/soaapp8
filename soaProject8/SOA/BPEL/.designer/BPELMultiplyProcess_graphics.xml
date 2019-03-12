@@ -4,10 +4,10 @@
    <annotationfile/>
    <iconize/>
    <partnerlink_locations>
-      <partnerlink name="bpelmultiplyprocess_client" x="0" y="383" side="left"/>
+      <partnerlink name="bpelmultiplyprocess_client" x="0" y="376" side="left"/>
       <partnerlink name="Humantask1.TaskService" x="0" y="18" side="left"/>
    </partnerlink_locations>
-   <graph_layout viewport="0,201,785,293" show_swimlanes="true">
+   <graph_layout viewport="0,150,797,297" show_swimlanes="true">
       <layout_item collapsed="false" xpath="/process" type="process" showhandlers="true"/>
       <layout_item collapsed="false" xpath="/process/sequence" type="sequence"/>
       <layout_item collapsed="true" xpath="/process/sequence/scope" type="human task" showhandlers="true"/>

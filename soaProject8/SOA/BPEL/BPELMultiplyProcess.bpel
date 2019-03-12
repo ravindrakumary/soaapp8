@@ -119,7 +119,7 @@
             </documentation>
             <condition>$Humantask11_globalVariable.payload/task:systemAttributes/task:outcome = 'APPROVE'</condition>
             <sequence>
-                <assign></assign>
+                <empty/>
             </sequence>
             <elseif>
                 <documentation>
