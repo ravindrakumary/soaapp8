@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Application xmlns="http://xmlns.oracle.com/adfm/application" version="12.2.1.9.14" id="DataBindings"
+             SeparateXMLFiles="false" Package="ht1ui" ClientType="Generic">
+  <pageMap>
+    <page path="/Humantask1_TaskDetails.jspx" usageId="ht1ui_Humantask1_TaskDetailsPageDef"/>
+    <page path="/Humantask1_TaskNotification.jspx" usageId="ht1ui_Humantask1_TaskNotificationPageDef"/>
+  </pageMap>
+  <pageDefinitionUsages>
+    <page id="ht1ui_Humantask1_TaskDetailsPageDef" path="ht1ui.pageDefs.Humantask1_TaskDetailsPageDef"/>
+    <page id="ht1ui_Humantask1_TaskNotificationPageDef" path="ht1ui.pageDefs.Humantask1_TaskNotificationPageDef"/>
+  </pageDefinitionUsages>
+  <dataControlUsages>
+    <dc id="ht1UI_Humantask1" path="ht1ui.ht1UI_Humantask1"/>
+  </dataControlUsages>
+</Application>
