@@ -120,7 +120,10 @@
                     <profile>
                         soaProject8
                     </profile>
-					<profile>
+                     <project>
+                        ht1UI
+                    </project>
+                    <profile>
                         ht1UI
                     </profile>
                     <outputfile>
