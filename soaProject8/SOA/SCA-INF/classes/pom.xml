@@ -120,9 +120,6 @@
                     <profile>
                         soaProject8
                     </profile>
-					<profile>
-                        ht1UI
-                    </profile>
                     <outputfile>
                         ${project.build.directory}/${project.build.finalName}.jar
                     </outputfile>

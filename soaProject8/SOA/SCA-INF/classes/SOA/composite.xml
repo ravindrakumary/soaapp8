@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Generated from Oracle SOA Archetype version 12.1.3.0.0  -->
+<composite name="soaProject8"
+           revision="1.0"
+           label="2013-10-14_14-36-17_928"
+           mode="active"
+           state="on"
+           xmlns="http://xmlns.oracle.com/sca/1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+           xmlns:orawsp="http://schemas.oracle.com/ws/2006/01/policy"
+           xmlns:ui="http://xmlns.oracle.com/soa/designer/"
+           xmlns:sca-ext="http://xmlns.oracle.com/sca/1.0-ext">
+  <import namespace="http://xmlns.oracle.com/soaApp8/soaProject8/BPELMultiplyProcess"
+          location="WSDLs/BPELMultiplyProcess.wsdl" importType="wsdl"/>
+  <import namespace="http://xmlns.oracle.com/bpel/workflow/taskService"
+          location="oramds:/soa/shared/workflow/TaskServiceInterface.wsdl" importType="wsdl"/>
+  <service name="bpelmultiplyprocess_client_ep" ui:wsdlLocation="WSDLs/BPELMultiplyProcess.wsdl">
+    <interface.wsdl interface="http://xmlns.oracle.com/soaApp8/soaProject8/BPELMultiplyProcess#wsdl.interface(BPELMultiplyProcess)"
+                    callbackInterface="http://xmlns.oracle.com/soaApp8/soaProject8/BPELMultiplyProcess#wsdl.interface(BPELMultiplyProcessCallback)"/>
+    <binding.ws port="http://xmlns.oracle.com/soaApp8/soaProject8/BPELMultiplyProcess#wsdl.endpoint(bpelmultiplyprocess_client_ep/BPELMultiplyProcess_pt)"/>
+    <callback>
+      <binding.ws port="http://xmlns.oracle.com/soaApp8/soaProject8/BPELMultiplyProcess#wsdl.endpoint(bpelmultiplyprocess_client_ep/BPELMultiplyProcessCallback_pt)"/>
+    </callback>
+  </service>
+  <property name="productVersion" type="xs:string" many="false">12.1.3.0.0</property>
+  <component name="BPELMultiplyProcess" version="2.0">
+    <implementation.bpel src="BPEL/BPELMultiplyProcess.bpel"/>
+    <componentType>
+      <service name="bpelmultiplyprocess_client" ui:wsdlLocation="WSDLs/BPELMultiplyProcess.wsdl">
+        <interface.wsdl interface="http://xmlns.oracle.com/soaApp8/soaProject8/BPELMultiplyProcess#wsdl.interface(BPELMultiplyProcess)"
+                        callbackInterface="http://xmlns.oracle.com/soaApp8/soaProject8/BPELMultiplyProcess#wsdl.interface(BPELMultiplyProcessCallback)"/>
+      </service>
+      <reference name="Humantask1.TaskService" ui:wsdlLocation="oramds:/soa/shared/workflow/TaskServiceInterface.wsdl">
+        <interface.wsdl interface="http://xmlns.oracle.com/bpel/workflow/taskService#wsdl.interface(TaskService)"
+                        callbackInterface="http://xmlns.oracle.com/bpel/workflow/taskService#wsdl.interface(TaskServiceCallback)"/>
+      </reference>
+    </componentType>
+    <property name="bpel.config.oneWayDeliveryPolicy" type="xs:string" many="false">async.persist</property>
+  </component>
+  <component name="Humantask1">
+    <implementation.workflow src="HumanTasks/Humantask1.task"/>
+    <componentType>
+      <service name="TaskService" ui:wsdlLocation="oramds:/soa/shared/workflow/TaskServiceInterface.wsdl">
+        <interface.wsdl interface="http://xmlns.oracle.com/bpel/workflow/taskService#wsdl.interface(TaskService)"
+                        callbackInterface="http://xmlns.oracle.com/bpel/workflow/taskService#wsdl.interface(TaskServiceCallback)"/>
+      </service>
+    </componentType>
+  </component>
+  <wire>
+    <source.uri>bpelmultiplyprocess_client_ep</source.uri>
+    <target.uri>BPELMultiplyProcess/bpelmultiplyprocess_client</target.uri>
+  </wire>
+  <wire>
+    <source.uri>BPELMultiplyProcess/Humantask1.TaskService</source.uri>
+    <target.uri>Humantask1/TaskService</target.uri>
+  </wire>
+</composite>
