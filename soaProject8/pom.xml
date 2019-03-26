@@ -96,8 +96,8 @@
                              your SOA Quickstart or JDeveloper install directory, 
                              with "/soa" appended to it.
                     -->
-                    <oracleHome>D:\Oracle\Middleware01Mar\Oracle_Home</oracleHome>
-                    <soaOracleHome>D:\Oracle\Middleware01Mar\Oracle_Home\soa</soaOracleHome>
+                    <!--<oracleHome>D:\Oracle\Middleware01Mar\Oracle_Home</oracleHome>-->
+                    <!--<soaOracleHome>D:\Oracle\Middleware01Mar\Oracle_Home\soa</soaOracleHome>-->
                     <input>${input}</input>
                 </configuration>
                 <!-- extensions=true is needed to use the custom sar packaging type -->
