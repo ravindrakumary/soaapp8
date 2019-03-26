@@ -96,7 +96,7 @@
                              your SOA Quickstart or JDeveloper install directory, 
                              with "/soa" appended to it.
                     -->
-                    <!--<oracleHome>JDEV_HOME</oracleHome>-->
+                    <oracleHome>D:\Oracle\Middleware01Mar\Oracle_Home</oracleHome>
                     <soaOracleHome>D:\Oracle\Middleware01Mar\Oracle_Home\soa</soaOracleHome>
                     <input>${input}</input>
                 </configuration>
