@@ -23,6 +23,7 @@
       <string v="oracle.jdeveloper.model.PathsConfiguration/ResourceBundlesContentSet"/>
    </list>
    <list n="listOfChildren">
+      <hash><url n="URL" path="Coherence/Coherence.jpr"/></hash>
       <hash><url n="URL" path="ht1UI/ht1UI.jpr"/></hash>
       <hash><url n="URL" path="soaProject8/soaProject8.jpr"/></hash>
    </list>
